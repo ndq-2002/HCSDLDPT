@@ -2,7 +2,7 @@ from pitch import funcPitch
 from aubio import pitch
 from RMSE import funcRMSE
 import os
-# from PercentSilence import funcPercentSilence
+from PercentSilence import funcPercentSilence
 from FrequencyMagnitude import funcFrequencyMagnitude
 
 listsubpath = []
@@ -25,7 +25,7 @@ import csv
 
 with open('data.csv', 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
-    header = ['Path', 'Pitch','FrequencyMagnitude']
+    header = ['Path', 'Pitch','FrequencyMagnitude','PercentSilence']
     writer.writerow(header)
     for path in allpath:
         try:
@@ -33,7 +33,7 @@ with open('data.csv', 'w', encoding='UTF8') as f:
                 path, 
                 funcPitch(path, pitch),
                 # funcRMSE(path), 
-                # funcPercentSilence(path),
+                funcPercentSilence(path),
                 funcFrequencyMagnitude(path)
             ]
             writer.writerow(data)   
