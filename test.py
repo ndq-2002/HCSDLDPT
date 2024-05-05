@@ -1,9 +1,37 @@
-import librosa
+from scipy.io import wavfile
+import glob
+from scipy.fftpack import fft,fftfreq
+import numpy as np
+import matplotlib.pyplot as plt
+import librosa.display
+import pylab
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import librosa    
+import glob
 
-# Thay đổi đường dẫn đến tệp âm thanh của bạn
-audio_path = 'C:\\Users\\84338\\OneDrive\\Desktop\\HTTM\\CSDLDPT\\data\\ca\\dolphin.wav'
 
-# Đọc tệp âm thanh và lấy thông tin tần số mẫu
-y, sr = librosa.load(audio_path, sr=None)
+signal, sample_rate = librosa.load(r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\data\bo\cow_1.wav', sr = 22050)
 
-print("Sample rate:", sr)
+# biến đổi Fourier transform
+fft = np.fft.fft(signal)
+# tính toán các giá trị trung bình trên các số phức để có được độ lớn
+spectrum = np.abs(fft)
+# biến tần số f
+f = np.linspace(0, sample_rate, len(spectrum))
+# lấy 1 nửa
+left_spectrum = spectrum[:int(len(spectrum)/2)]
+left_f = f[:int(len(spectrum)/2)]
+max = 0
+for i in left_spectrum:
+    if max < i:
+        max = i
+print('TB:')
+print(sum(left_spectrum) / len(left_spectrum))
+print(max)
+plt.plot(left_f, left_spectrum, alpha=0.4)
+# plt.plot(f, spectrum, alpha=0.4)
+plt.xlabel('Frequency')
+plt.ylabel('Magnitude')
+plt.title('Power spectrum')
+plt.show()

@@ -26,7 +26,7 @@ def Find_Max(arr, f, l):
 def Find_Min(arr, f, l):
     """
     :param arr: list of integer
-    :return: item max of list
+    :return: item min of list
     """
     min = arr[f]
 
@@ -41,7 +41,7 @@ def KhoangLang(arr, f, l):
     max = Find_Max(arr, f, l)
     min = Find_Min(arr, f, l)
     tb = (max + min) / 2
-    nguong = tb * 0.3
+    nguong = tb * 0.2
     dem = 0
     for i in range(f, l):
         if arr[i] > nguong:
@@ -51,7 +51,6 @@ def KhoangLang(arr, f, l):
 
 
 # plt.figure(figsize=(5, 5))
-# path = "E:/Learn/tool_instrument_voice_recognition/src/File âm thanh/1 máy sấy tóc/may_say_toc_1.wav"
 def funcPercentSilence(path):
     y, sr = librosa.load(path)  # y la bien do theo thoi gian, sr tan so lay mau
     # print(librosa.feature.mfcc(y=y, sr=sr).shape)
@@ -64,4 +63,4 @@ def funcPercentSilence(path):
     return result
 
 
-# print(funcPercentSilence("E:/Learn/tool_instrument_voice_recognition/src/File âm thanh/1 máy sấy tóc/may_say_toc_1.wav"))
+# print(funcPercentSilence(r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\data\bo\cow_1.wav'))

@@ -25,18 +25,17 @@ def funcPitch(path, pitch):
     
     total_frames = 0
     while True:
-        samples, read = s()
+        samples, read = s() # lấy mẫu âm thanh và gán = samples, read: chứa số lượng mẫu đọc
         pitch = pitch_o(samples)[0]
-        pitches += [pitch]
+        pitches += [pitch] # cộng các pitch với nhau
         confidence = pitch_o.get_confidence()
-        confidences += [confidence]
-        total_frames += read
+        confidences += [confidence] # cộng các confidences với nhau
+        total_frames += read # cập nhật số lượng mẫu đã đọc được
         if read < hop_s: break
 
     result = []
 
-    # print(len(pitches))
-    step = int(len(pitches)/7)
+    step = int(len(pitches)/7) 
 
     for i in range(0, 7, 1):
         max = step*(i+1)

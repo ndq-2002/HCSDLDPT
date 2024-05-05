@@ -59,7 +59,3 @@ def funcFrequencyMagnitude(path):
     # print(freq) 
     # print(magnitude)  
     return pairs
-
-
-# test
-# print(funcFrequencyMagnitude("E:/Learn/tool_instrument_voice_recognition/src/File âm thanh/1 máy sấy tóc/may_say_toc_1.wav"))

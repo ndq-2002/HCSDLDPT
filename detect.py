@@ -1,20 +1,19 @@
 from pitch import funcPitch
 from aubio import pitch
-from RMSE import funcRMSE
+# from RMSE import funcRMSE
 from PercentSilence import funcPercentSilence
 from FrequencyMagnitude import funcFrequencyMagnitude
 
 ### % phần trăm khoảng lặng 0,1
-### độ lệch năng lượng 0,3
 ### pitch 0,3
 ### tần số có mật độ lớn nhất 0,3
 from attribute import toolHandleAudio
 from result import pathAndResult
 
-configPercentSilence = 0.1
+configPercentSilence = 0.2
 # configRMSE = 0.3
-configPitch = 0.3
-configFrequencyMagnitude = 0.3
+configPitch = 0.4
+configFrequencyMagnitude = 0.4
 
 def compareFile(att1, att2): 
     maxRes = 1
@@ -32,12 +31,13 @@ def compareFile(att1, att2):
     return maxRes
     
 ###################################### input ###########################
-path = r"C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\data\bo\cow_1.wav" 
-# test_DongCo F1.wav
-# test_khoandien.wav
-# test_maysaytoc.wav
-# test_MayThoiLa.wav
-# test_mayxay.wav
+path = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\test\cat_11.wav' 
+# cat_11.wav
+# chicken_10.wav
+# cow_10.wav
+# duck_5.wav
+# monkey_8.wav
+# rabit_09.wav
 
 att1 = [] 
 
@@ -52,29 +52,31 @@ frequencyAtt = []
 for a, b in frequencyMagnitudeAtt:
     magnitudeAtt.append(a)
     frequencyAtt.append(b)
-
+# print(magnitudeAtt)
+# print(frequencyAtt)
 for i in range(7):
     att1.append(
         toolHandleAudio(
             pitchAtt[i],
-            # RMSEAtt[i]
+            # RMSEAtt[i],
             percentSilenceAtt[i],
             magnitudeAtt[i],
             frequencyAtt[i]
         )
     )
-    # print (pitchAtt[i], percentSilenceAtt[i], magnitudeAtt[i], frequencyAtt[i])
+    # print (pitchAtt[i], RMSEAtt[i], percentSilenceAtt[i], magnitudeAtt[i], frequencyAtt[i])
 
 ####################################### get data csv #######################
 import csv
 
-with open('data.csv', 'r', encoding='UTF8') as f:
+with open(r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\data.csv', 'r', encoding='UTF8') as f:
     reader = csv.reader(f)
     l = [row for row in reader]
     metadata = []
     for row in range(len(l)):
         if row > 1 and row %2 == 0 :
             metadata.append(l[row])
+
 
 lastResult = []
 for i in range(len(metadata)):
@@ -106,7 +108,7 @@ for i in range(len(metadata)):
 
     lastResult.append(
         pathAndResult(
-            "Type: " + metadata[i][0].split('/')[5],
+            "Path: " + metadata[i][0],
             compareFile(att1, att)
         )
     )
@@ -119,7 +121,7 @@ for i in range(100):
             swap = lastResult[i]
             lastResult[i] = lastResult[j]
             lastResult[j] = swap
-
+print("-----------> Result <----------")
 print(lastResult[0].type, lastResult[0].distance)
 print(lastResult[1].type, lastResult[1].distance)
 print(lastResult[2].type, lastResult[2].distance)

@@ -25,14 +25,13 @@ import csv
 
 with open('data.csv', 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
-    header = ['Path', 'Pitch','FrequencyMagnitude','PercentSilence']
+    header = ['Path', 'Pitch','PercentSilence','FrequencyMagnitude']
     writer.writerow(header)
     for path in allpath:
         try:
             data = [
                 path, 
                 funcPitch(path, pitch),
-                # funcRMSE(path), 
                 funcPercentSilence(path),
                 funcFrequencyMagnitude(path)
             ]

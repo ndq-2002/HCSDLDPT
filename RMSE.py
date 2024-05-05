@@ -3,6 +3,7 @@ import numpy as np
 import librosa
 import librosa.display
 import IPython.display as ipd
+import os
 
 # 700 phần tử, cứ 100 phần tử / 1s
 # giá trị đầu tiên bằng trung bình của 100 phần tử
@@ -12,6 +13,8 @@ def funcRMSE(file_path):
     HOP_LENGTH = 512
     
     data, samplerate = librosa.load(file_path, duration=7)
+    print(samplerate)
+    print(len(data))
     rms = librosa.feature.rms(data, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
     arr = np.array_split(rms, 7)
     
