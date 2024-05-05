@@ -9,12 +9,12 @@ import numpy as np
 def funcPitch(path, pitch):
     win_s = 4096 #kích thước cửa sổ cho phân tích tần số
     hop_s = 512  #kích thước bước nhảy giữa các khung âm thanh liên tiếp
+    samplerate = 44100 # tần số lấy mẫu của âm thanh 
+    tolerance = 0.8 # ngưỡng độ tin cậy
+    total_frames = 0 # số lượng mẫu
     
-    samplerate = 44100 #tần số lấy mẫu của âm thanh 
     s = source(path, samplerate, hop_s) 
     samplerate = s.samplerate
-    
-    tolerance = 0.8 # ngưỡng độ tin cậy
     
     pitch_o = pitch("yin", win_s, hop_s, samplerate) # "yin": là thuật toán để tính toán tần số
     pitch_o.set_unit("midi") # đơn vị tính tần số = MIDI
@@ -23,7 +23,7 @@ def funcPitch(path, pitch):
     pitches = []
     confidences = []  
     
-    total_frames = 0
+    
     while True:
         samples, read = s() # lấy mẫu âm thanh và gán = samples, read: chứa số lượng mẫu đọc
         pitch = pitch_o(samples)[0]

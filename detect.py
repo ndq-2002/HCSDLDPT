@@ -127,35 +127,3 @@ print(lastResult[1].type, lastResult[1].distance)
 print(lastResult[2].type, lastResult[2].distance)
 # print(lastResult[3].type, lastResult[3].distance)
 # print(lastResult[4].type, lastResult[4].distance)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# att2 = []
-# att2.append(toolInstrumentVoice(41.0105, 52.480352808569755, 18.498866213151928, 6044, 752.2972848700547))
-# att2.append(toolInstrumentVoice(80.53759, 6.295327728661332, 48.49433106575963, 25529, 144.3187829958743))
-# att2.append(toolInstrumentVoice(78.17408, 3.6278046603824587, 47.73242630385488, 45436, 66.06745432748225))
-# att2.append(toolInstrumentVoice(79.63045, 3.843097218001882, 48.29478458049886, 70831, 37.561908261746865))
-# att2.append(toolInstrumentVoice(78.884094, 7.780515449953133, 49.88208616780045, 108914, 66.06745432748225))
-# att2.append(toolInstrumentVoice(80.22667, 5.244177334922521, 49.55555555555555, 128821, 144.3187829958743))
-# att2.append(toolInstrumentVoice(80.14571, 7.7701177481295804, 45.35514878292073, 148306, 752.2972848700547))
-
-# print(compareFile(att1, att2))
