@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # giá trị đầu tiên bằng trung bình của 100 phần tử
 
 # chia 7 đoạn
-# tính phần trăm của các âm nhỏ hơn ngưỡng nghe với ngưỡng nghe = (max + min) / 2 * 0.3
+# tính phần trăm của các âm nhỏ hơn ngưỡng nghe với ngưỡng nghe = (max + min) / 2 * 0.2
 
 # tần số lấy mẫu là số lấy mẫu trong 1s
 

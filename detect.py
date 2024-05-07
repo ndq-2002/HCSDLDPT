@@ -3,6 +3,7 @@ from aubio import pitch
 # from RMSE import funcRMSE
 from PercentSilence import funcPercentSilence
 from FrequencyMagnitude import funcFrequencyMagnitude
+import numpy as np
 
 ### % phần trăm khoảng lặng 0,1
 ### pitch 0,3
@@ -15,6 +16,38 @@ configPercentSilence = 0.2
 configPitch = 0.4
 configFrequencyMagnitude = 0.4
 
+
+
+def cosine_similarity(vec1, vec2):
+    dot_product = np.dot(vec1, vec2)
+    norm_vec1 = np.linalg.norm(vec1)
+    norm_vec2 = np.linalg.norm(vec2)
+    return dot_product / (norm_vec1 * norm_vec2)
+
+def compareFileByCosine(att1, att2):
+    max_similarity = 0  # Initialize to the lowest possible similarity (cosine similarity ranges from -1 to 1)
+    for i in range(7):
+        for j in range(7):
+            # Create vectors from attributes
+            vec1 = np.array([
+                att1[i].PercentSilence,
+                att1[i].Pitch,
+                att1[i].Magnitude,
+                att1[i].Frequency
+            ])
+            vec2 = np.array([
+                att2[j].PercentSilence,
+                att2[j].Pitch,
+                att2[j].Magnitude,
+                att2[j].Frequency
+            ])
+            # Calculate cosine similarity between the two vectors
+            similarity = cosine_similarity(vec1, vec2)
+            if max_similarity < similarity:
+                max_similarity = similarity
+    
+    return max_similarity
+#--------------------------------------------------------------------------------------------------------------------------
 def compareFile(att1, att2): 
     maxRes = 1
     for i in range(7):
@@ -31,7 +64,7 @@ def compareFile(att1, att2):
     return maxRes
     
 ###################################### input ###########################
-path = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\test\cat_11.wav' 
+path = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\data\vit\duck_3.wav' 
 # cat_11.wav
 # chicken_10.wav
 # cow_10.wav
@@ -109,7 +142,8 @@ for i in range(len(metadata)):
     lastResult.append(
         pathAndResult(
             "Path: " + metadata[i][0],
-            compareFile(att1, att)
+            # compareFileByCosine(att1, att)
+            compareFile(att1,att)
         )
     )
 
