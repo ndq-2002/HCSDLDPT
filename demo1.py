@@ -83,96 +83,125 @@ def aggregate_features(features):
             stats[key] = np.vstack((stats[key], padding))
     
     return np.concatenate([stats[key].flatten() for key in stats])
-
-# audio = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\test\cow_10.wav'
+# audio = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\test\cow_10.wav' 
 # print(aggregate_features(extract_features(audio)))
+
 # Hàm xử lý tất cả các file âm thanh trong một thư mục
+# def process_directory(directory):
+#     result = []
+#     data = []
+#     # for root, _, files in os.walk(directory):
+#     #     for filename in files:
+#     #         if filename.endswith('.wav'):
+#     #             path = os.path.join(root, filename)
+#     #             features = extract_features(path)
+#     #             aggregated_features = aggregate_features(features)
+#     #             data.append(aggregated_features)
+#     for filename in os.listdir(directory):
+#         if filename.endswith('.wav'):
+#             path = os.path.join(directory, filename)
+#             features = extract_features(path)
+#             aggregated_features = aggregate_features(features)
+#             data.append(aggregated_features)
+            
+    
+#     # Tạo tiêu đề cho các cột trong file CSV
+#     header = []
+#     for key in ['mfcc', 'fundamental_frequencies', 'energies']:
+#         num_coeffs = 13 if key == 'mfcc' else 1
+#         for i in range(num_coeffs):
+#             header += [f'{key}_mean_{i}', f'{key}_std_{i}', f'{key}_min_{i}', f'{key}_max_{i}']
+#         # header += [f'{key}_mean_{i}' for i in range(num_coeffs)]
+#         # header += [f'{key}_std_{i}' for i in range(num_coeffs)]
+#         # header += [f'{key}_min_{i}' for i in range(num_coeffs)]
+#         # header += [f'{key}_max_{i}' for i in range(num_coeffs)]
+    
+#     # listsubpath = []
+#     # for x in os.walk(directory):
+#     #     listsubpath.append(x[0].replace("\\", "/"))
+#     # listsubpath.pop(0)
+
+#     # # get files
+#     # allpath = []
+#     # for subpath in listsubpath:
+#     #     f = []
+#     #     for (dirpath, dirnames, filenames) in os.walk(subpath):
+#     #         f.extend(filenames)
+#     #         break
+#     #     for namefile in f:
+#     #         allpath.append(subpath + "/" + namefile)
+    
+#     # Lưu các đặc trưng vào file CSV
+#     with open('features.csv', 'w', encoding='UTF8') as csvfile:
+#         writer = csv.writer(csvfile)
+#         writer.writerow(header)
+#         # for path in allpath:
+#         #     try:
+#         #         result = [
+#         #             path,
+#         #             data 
+#         #         ]
+#         #         writer.writerow(result)   
+#         #     except:
+#         #         print("======" + path)
+#         #         print('Have exception')
+#         writer.writerows(data)
+# def process_directories(root_directory):
+#     for dirpath, dirnames, _ in os.walk(root_directory):
+#         for dirname in dirnames:
+#             directory = os.path.join(dirpath, dirname)
+#             process_directory(directory)
+# # # Gọi hàm xử lý thư mục chứa các file âm thanh
+# path = 'C:\\Users\\84338\\OneDrive\\Desktop\\HTTM\\CSDLDPT\\data'
+# process_directories(path)
+
 def process_directory(directory):
-    result = []
     data = []
     for filename in os.listdir(directory):
         if filename.endswith('.wav'):
             path = os.path.join(directory, filename)
             features = extract_features(path)
             aggregated_features = aggregate_features(features)
-            data.append(aggregated_features)
-            
-    
-    # Tạo tiêu đề cho các cột trong file CSV
-    header = []
+            # Tạo một từ điển mới bao gồm cả 'file_path' và các phần tử trong aggregated_features
+            feature_with_path = {'file_path': filename}
+            feature_with_path.update(aggregated_features)
+            data.append(feature_with_path)
+    return data
+
+def create_csv_header():
+    header = ['file_path']
     for key in ['mfcc', 'fundamental_frequencies', 'energies']:
         num_coeffs = 13 if key == 'mfcc' else 1
-        header += [f'{key}_mean_{i}' for i in range(num_coeffs)]
-        header += [f'{key}_std_{i}' for i in range(num_coeffs)]
-        header += [f'{key}_min_{i}' for i in range(num_coeffs)]
-        header += [f'{key}_max_{i}' for i in range(num_coeffs)]
-    
-    listsubpath = []
-    for x in os.walk(directory):
-        listsubpath.append(x[0].replace("\\", "/"))
-    listsubpath.pop(0)
+        for i in range(num_coeffs):
+            header += [f'{key}_mean_{i}', f'{key}_std_{i}', f'{key}_min_{i}', f'{key}_max_{i}']
+    return header
 
-    # get files
-    allpath = []
-    for subpath in listsubpath:
-        f = []
-        for (dirpath, dirnames, filenames) in os.walk(subpath):
-            f.extend(filenames)
-            break
-        for namefile in f:
-            allpath.append(subpath + "/" + namefile)
+def process_directories(root_directory):
+    csv_header_written = False
+    header = create_csv_header()
     
-    # Lưu các đặc trưng vào file CSV
-    with open('features.csv', 'w', newline='') as csvfile:
+    with open('features.csv', 'w', newline='', encoding='UTF8') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(header)
-        for path in allpath:
-            try:
-                result = [
-                    path,
-                    data 
-                ]
-                writer.writerow(result)   
-            except:
-                print("======" + path)
-                print('Have exception')
-        # writer.writerows(data)
+        
+        for dirpath, dirnames, _ in os.walk(root_directory):
+            for dirname in dirnames:
+                directory = os.path.join(dirpath, dirname)
+                data = process_directory(directory)
+                
+                if data and not csv_header_written:
+                    writer.writerow(header)
+                    csv_header_written = True
+                
+                for row in data:
+                    row_with_path = [row['file_path']]  # Lấy tên file từ dữ liệu đã trả về
+                    for key in ['mfcc', 'fundamental_frequencies', 'energies']:
+                        num_coeffs = 13 if key == 'mfcc' else 1
+                        row_with_path += row[key]['mean']
+                        row_with_path += row[key]['std']
+                        row_with_path += row[key]['min']
+                        row_with_path += row[key]['max']
+                    writer.writerow(row_with_path)
 
-# Gọi hàm xử lý thư mục chứa các file âm thanh
-path = 'C:\\Users\\84338\\OneDrive\\Desktop\\HTTM\\CSDLDPT\\data\\'
-process_directory(path)
-
-# listsubpath = []
-# for x in os.walk('C:\\Users\\84338\\OneDrive\\Desktop\\HTTM\\CSDLDPT\\data'):
-#     listsubpath.append(x[0].replace("\\", "/"))
-# listsubpath.pop(0)
-
-# # get files
-# allpath = []
-# for subpath in listsubpath:
-#     f = []
-#     for (dirpath, dirnames, filenames) in os.walk(subpath):
-#         f.extend(filenames)
-#         break
-#     for namefile in f:
-#         allpath.append(subpath + "/" + namefile)
-
-# # write to csv
-# import csv
-
-# with open('data.csv', 'w', encoding='UTF8') as f:
-#     writer = csv.writer(f)
-#     header = ['Path', '1','2','3']
-#     writer.writerow(header)
-#     for path in allpath:
-#         try:
-#             data = [
-#                 path, 
-#                 funcPitch(path, pitch),
-#                 funcPercentSilence(path),
-#                 funcFrequencyMagnitude(path)
-#             ]
-#             writer.writerow(data)   
-#         except:
-#             print("======" + path)
-#             print('Have exception')
+# Call the function with the root directory containing all subdirectories with .wav files
+path = 'C:\\Users\\84338\\OneDrive\\Desktop\\HTTM\\CSDLDPT\\data'
+process_directories(path)
