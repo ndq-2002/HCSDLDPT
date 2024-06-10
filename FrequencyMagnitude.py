@@ -12,7 +12,8 @@ import numpy as np
 # vị trí của phần tử đó = hz tương ứng => Dùng 2 mảng để lưu lại 2 giá trị đó
 
 def funcFrequencyMagnitude(path):
-    audio, sr = librosa.load(path, duration = 7) #Load file âm thanh vào librosa
+    #audio, sr = librosa.load(path, duration = 7) #Load file âm thanh vào librosa
+    audio, sr = librosa.load(path, sr=None) #Load file âm thanh vào librosa
     X = np.fft.fft(audio) #Mảng X là mảng chứa dãy tần số và mật độ của nó (Mặc định thì độ lớn của mật độ là số ảo ) (Số thực = mật độ / Số ảo = giá trị pha (Ko cần))
     X_mag = np.absolute(X) #Lấy giá trị tuyệt đối thì sẽ có được phần số thực 
 

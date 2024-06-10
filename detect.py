@@ -64,7 +64,7 @@ def compareFile(att1, att2):
     return maxRes
     
 ###################################### input ###########################
-path = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\data\vit\duck_3.wav' 
+path = r'C:\Users\84338\OneDrive\Desktop\HTTM\CSDLDPT\test\cow_10.wav' 
 # cat_11.wav
 # chicken_10.wav
 # cow_10.wav
